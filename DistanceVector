@@ -21,14 +21,12 @@ def parse_nodes():
     except EOFError:
         print("Warning: Reached end of input while parsing nodes")
     
-    print(f"Found nodes: {nodes}")
     return nodes
     pass
 
 def parse_initial_topology():
     """Read topology links until UPDATE keyword"""
     topology = {}
-    print("Parsing initial topology...")
     
     try:
         while True:
@@ -52,14 +50,12 @@ def parse_initial_topology():
     except EOFError:
         print("Warning: Reached end of input while parsing topology")
     
-    print(f"Parsed topology: {topology}")
     return topology
     pass
 
 def parse_updates():
     """Read topology updates until END keyword"""
     updates = []
-    print("Parsing updates...")
     
     try:
         while True:
@@ -75,7 +71,6 @@ def parse_updates():
     except EOFError:
         print("Warning: Reached end of input while parsing updates")
     
-    print(f"Parsed updates: {updates}")
     return updates
     pass
 def initialize_distance_tables(nodes, topology):
@@ -102,24 +97,22 @@ def initialize_distance_tables(nodes, topology):
                             # Not a direct neighbor - can't route through it
                             distance_tables[node][dest][neighbor] = float('inf')
     
-    print("Initialized distance tables with direct costs and INF")
     return distance_tables
 
 def print_distance_tables(distance_tables, nodes, time_step):
     """Print distance tables in required format"""
-    for node in sorted(nodes):  # Alphabetical order
+    for node in sorted(nodes):
         print(f"Distance Table of router {node} at t={time_step}:")
         
-        # Get other nodes (destinations) in alphabetical order
         other_nodes = sorted([n for n in nodes if n != node])
         
-        # Print header row with neighbors
+        # Print header with exact spacing
         print("    ", end="")
         for neighbor in other_nodes:
             print(f" {neighbor:4}", end="")
-        print()  # New line
+        print()
         
-        # Print each destination row
+        # Print rows with exact spacing
         for dest in other_nodes:
             print(f"{dest:4}", end="")
             for neighbor in other_nodes:
@@ -131,9 +124,8 @@ def print_distance_tables(distance_tables, nodes, time_step):
                         print(f" {dist:4}", end="")
                 else:
                     print(f" {'INF':4}", end="")
-            print()  # New line after each row
-        
-        print()  # Blank line between tables
+            print()
+        print()  # Blank line
 
 def run_dv_algorithm(nodes, topology, distance_tables):
     """Run Distance Vector algorithm until convergence"""
@@ -142,7 +134,6 @@ def run_dv_algorithm(nodes, topology, distance_tables):
     
     while True:
         time_step += 1
-        print(f"Running DV algorithm round {time_step}")
         
         # Store old tables for convergence check
         old_tables = {}
@@ -184,13 +175,11 @@ def run_dv_algorithm(nodes, topology, distance_tables):
                             break
         
         if converged:
-            print("Algorithm converged!")
             routing_tables = generate_routing_tables(nodes, distance_tables)
             print_routing_tables(routing_tables, nodes)
             break
         
         if time_step > 10:  # Safety limit
-            print("Max iterations reached")
             break
 def generate_routing_tables(nodes, distance_tables):
     """Generate routing tables from distance tables"""
@@ -223,7 +212,6 @@ def generate_routing_tables(nodes, distance_tables):
 def print_routing_tables(routing_tables, nodes):
     """Print routing tables in required format"""
     for node in sorted(nodes):
-        print(f"Routing Table of router {node}:")
         for dest in sorted(nodes):
             if dest != node:
                 next_hop, cost = routing_tables[node][dest]
@@ -256,11 +244,9 @@ def apply_topology_updates(topology, updates, nodes):
             topology[node1][node2] = weight
             topology[node2][node1] = weight
     
-    print(f"Applied updates: {updates}")
-    print(f"Updated topology: {topology}")
+
 
 def main():
-    print("Distance Vector Algorithm Starting...")
     
     # Phase 1: Parse nodes and initial topology
     nodes = parse_nodes()
@@ -279,7 +265,6 @@ def main():
         distance_tables = initialize_distance_tables(nodes, topology)
         run_dv_algorithm(nodes, topology, distance_tables)
     
-    print("Program complete")
 
 if __name__ == "__main__":
     main()

@@ -143,10 +143,10 @@ Step 11 Tasks (FINAL STEP):
 - [x] Commit: "ASSIGNMENT COMPLETE - Successfully implemented topology updates and dual algorithm runs"
 
 ### 4.3 Gradescope Submission #1
-
+Step 12
 Tasks:
-- [ ] Submit to Gradescope for acceptance testing
-- [ ] Fix any issues found
+- [x] Submit to Gradescope for acceptance testing
+- [x] Fix any issues found
 - [ ] Commit: "Fix issues from Gradescope acceptance testing"
 
 ---
