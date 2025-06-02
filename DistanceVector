@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+# DV Routing Algorithm Implementation
+# Assignment3 Network_routing
+
+def main():
+    print("Distance Vector Algorithm Starting...")
+    # TODO: Implementation 
+
+if __name__ == "__main__":
+    main()
