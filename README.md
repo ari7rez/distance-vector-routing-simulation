@@ -33,16 +33,16 @@
 - `data_structures.md` - Planned data structures
 
 **Tasks:**
-- [ ] Choose Python as language
-- [ ] Design data structures:
+- [x] Choose Python as language
+- [x] Design data structures:
   ```python
   # Distance tables: dict of dict
   # Routing tables: dict 
   # Topology: dict of neighbors
   ```
-- [ ] Plan input parsing strategy
-- [ ] Plan output formatting
-- [ ] **Commit:** "Add design documentation and data structure planning"
+- [x] Plan input parsing strategy
+- [x] Plan output formatting
+- [x] **Commit:** "Add design documentation and data structure planning"
 
 ### 2.2 Test Case Planning
 
@@ -65,19 +65,25 @@
 **Files to create:**
 - `DistanceVector` (Python file)
 
-**Tasks:**
+**Step 3 Tasks:**
 - [x] Add shebang: `#!/usr/bin/env python3`
 - [x] Implement topology input parsing
 - [x] Test with sample input
 - [x] **Commit:** "Implement topology input parsing"
 
+**Step 4 Tasks:**
+- [X] Implement update parsing until END keyword
+- [X] Handle -1 weight values for link removal  
+- [X] Test with complete sample input
+- [X] **Commit:** "Implement topology update parsing"
+
 ### 3.2 Data Structure Setup
 
 **Tasks:**
-- [ ] Implement distance table initialization
-- [ ] Implement routing table structures
-- [ ] Add debug output for verification
-- [ ] **Commit:** "Add distance and routing table data structures"
+- [] Implement distance table initialization
+- [] Implement routing table structures
+- [] Add debug output for verification
+- [] **Commit:** "Add distance and routing table data structures"
 
 ### 3.3 Basic DV Algorithm
 

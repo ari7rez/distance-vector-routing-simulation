@@ -27,8 +27,33 @@ def parse_nodes():
 
 def parse_initial_topology():
     """Read topology links until UPDATE keyword"""
+    topology = {}
     print("Parsing initial topology...")
-    # TODO: Implement in next step
+    
+    try:
+        while True:
+            line = input().strip()
+            if line == "UPDATE":
+                break
+            
+            # Parse "X Y 3" format
+            parts = line.split()
+            node1, node2, weight = parts[0], parts[1], int(parts[2])
+            
+            # Store bidirectional links
+            if node1 not in topology:
+                topology[node1] = {}
+            if node2 not in topology:
+                topology[node2] = {}
+                
+            topology[node1][node2] = weight
+            topology[node2][node1] = weight
+            
+    except EOFError:
+        print("Warning: Reached end of input while parsing topology")
+    
+    print(f"Parsed topology: {topology}")
+    return topology
     pass
 
 def parse_updates():
@@ -41,8 +66,8 @@ def main():
     print("Distance Vector Algorithm Starting...")
     
     # Three-phase input parsing
-    parse_nodes()
-    parse_initial_topology()
+    nodes = parse_nodes()
+    topology = parse_initial_topology()
     parse_updates()
     
     print("Input parsing complete")
