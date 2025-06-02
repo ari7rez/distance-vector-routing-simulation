@@ -189,7 +189,49 @@ def run_dv_algorithm(nodes, topology, distance_tables):
         
         if time_step > 10:  # Safety limit
             print("Max iterations reached")
+        if converged:
+            print("Algorithm converged!")
+            # Generate and print routing tables
+            routing_tables = generate_routing_tables(nodes, distance_tables)
+            print_routing_tables(routing_tables, nodes)
             break
+def generate_routing_tables(nodes, distance_tables):
+    """Generate routing tables from distance tables"""
+    routing_tables = {}
+    
+    for node in nodes:
+        routing_tables[node] = {}
+        for dest in nodes:
+            if dest != node:
+                # Find best route (minimum cost) to destination
+                best_cost = float('inf')
+                best_neighbor = None
+                
+                for neighbor in distance_tables[node][dest]:
+                    cost = distance_tables[node][dest][neighbor]
+                    if cost < best_cost:
+                        best_cost = cost
+                        best_neighbor = neighbor
+                    elif cost == best_cost and neighbor < best_neighbor:
+                        # Tie-breaking: alphabetical order
+                        best_neighbor = neighbor
+                
+                if best_neighbor is not None and best_cost != float('inf'):
+                    routing_tables[node][dest] = (best_neighbor, best_cost)
+                else:
+                    routing_tables[node][dest] = ('INF', 'INF')
+    
+    return routing_tables
+
+def print_routing_tables(routing_tables, nodes):
+    """Print routing tables in required format"""
+    for node in sorted(nodes):
+        print(f"Routing Table of router {node}:")
+        for dest in sorted(nodes):
+            if dest != node:
+                next_hop, cost = routing_tables[node][dest]
+                print(f"{dest},{next_hop},{cost}")
+        print()  # Blank line between tables
 
 def main():
     print("Distance Vector Algorithm Starting...")

@@ -119,6 +119,12 @@ Step 9 Tasks:
 - [x] Test algorithm convergence in 3 rounds
 - [x] Commit: "Implement required output formatting"
 
+Step 10 Tasks:
+- [x] Add routing table generation from distance tables
+- [x] Implement best route selection with tie-breaking
+- [x] Print routing tables in CSV format
+- [x] Commit:"Implement routing table generation and printing"
+
 ### 4.2 Initial Testing
 
 Files to create:
@@ -126,10 +132,10 @@ Files to create:
 - `results/` directory for test outputs
 
 Tasks:
-- [ ] Test with sample topology
-- [ ] Compare output with manual calculations
-- [ ] Fix any discrepancies
-- [ ] Commit: "Fix algorithm issues found in testing"
+- [x] Test with sample topology
+- [x] Compare output with manual calculations
+- [x] Fix any discrepancies
+-
 
 ### 4.3 Gradescope Submission #1
 
