@@ -8,9 +8,21 @@
 # Assignment: Network Routing Protocols
 
 def parse_nodes():
-    """Read node names until START """
+    """Read node names until START keyword"""
+    nodes = []
     print("Parsing nodes...")
-    # TODO: Implement in next step
+    
+    try:
+        while True:
+            line = input().strip()
+            if line == "START":
+                break
+            nodes.append(line)
+    except EOFError:
+        print("Warning: Reached end of input while parsing nodes")
+    
+    print(f"Found nodes: {nodes}")
+    return nodes
     pass
 
 def parse_initial_topology():
@@ -39,7 +51,12 @@ if __name__ == "__main__":
     main()
 def main():
     print("Distance Vector Algorithm Starting...")
-    # TODO: Implementation 
+    # Three-phase input parsing
+    nodes = parse_nodes()
+    parse_initial_topology()
+    parse_updates()
+    
+    print("Input parsing complete") 
 
 if __name__ == "__main__":
     main()

@@ -67,9 +67,9 @@
 
 **Tasks:**
 - [x] Add shebang: `#!/usr/bin/env python3`
-- [ ] Implement topology input parsing
-- [ ] Test with sample input
-- [ ] **Commit:** "Implement topology input parsing"
+- [x] Implement topology input parsing
+- [x] Test with sample input
+- [x] **Commit:** "Implement topology input parsing"
 
 ### 3.2 Data Structure Setup
 
