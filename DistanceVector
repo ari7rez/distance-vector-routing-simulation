@@ -105,6 +105,36 @@ def initialize_distance_tables(nodes, topology):
     print("Initialized distance tables with direct costs and INF")
     return distance_tables
 
+def print_distance_tables(distance_tables, nodes, time_step):
+    """Print distance tables in required format"""
+    for node in sorted(nodes):  # Alphabetical order
+        print(f"Distance Table of router {node} at t={time_step}:")
+        
+        # Get other nodes (destinations) in alphabetical order
+        other_nodes = sorted([n for n in nodes if n != node])
+        
+        # Print header row with neighbors
+        print("    ", end="")
+        for neighbor in other_nodes:
+            print(f" {neighbor:4}", end="")
+        print()  # New line
+        
+        # Print each destination row
+        for dest in other_nodes:
+            print(f"{dest:4}", end="")
+            for neighbor in other_nodes:
+                if neighbor in distance_tables[node][dest]:
+                    dist = distance_tables[node][dest][neighbor]
+                    if dist == float('inf'):
+                        print(f" {'INF':4}", end="")
+                    else:
+                        print(f" {dist:4}", end="")
+                else:
+                    print(f" {'INF':4}", end="")
+            print()  # New line after each row
+        
+        print()  # Blank line between tables
+
 def main():
     print("Distance Vector Algorithm Starting...")
     
@@ -115,6 +145,9 @@ def main():
     
     # Initialize distance tables
     distance_tables = initialize_distance_tables(nodes, topology)
+    
+    # Test printing distance tables
+    print_distance_tables(distance_tables, nodes, 0)
     
     print("Input parsing complete")
 
