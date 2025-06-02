@@ -152,16 +152,25 @@ Tasks:
 ---
 
 ## Stage 5: Enhanced Testing (Days 7-9)
+Step 13
 
+- [x] Remove all debug print statements for Gradescope compatibility
+- [x] Fix algorithm calculation bug - use old_tables for synchronous updates
+- [x] Verified Y-Z distance now correctly calculates as 12 (not 10)
+- [ ] Fix time step continuity between algorithm runs
+- [ ] Fix output spacing to match expected format exactly
+- [x] Fix time sequence
+- [ ] Pass Gradescope acceptance tests
+- [x] Commit:"Fixed DV equation to use previous round data for synchronous updates"
 ### 5.1 Additional Test Cases
 
 Files to create:
-- `test_cases/complex_topology.txt`
-- `test_cases/link_failure.txt`
-- `test_cases/various_weights.txt`
+- test_cases/test_topology.txt
+- test_cases/test_input.txt
+- test_cases/various_weights.txt
 
 Tasks:
-- [ ] Create and test multiple topologies
+- [x] Create and test multiple topologies
 - [ ] Test topology updates/changes
 - [ ] Verify convergence in all cases
 - [ ] Commit: "Add comprehensive test suite and fix edge cases"

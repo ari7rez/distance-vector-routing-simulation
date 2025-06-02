@@ -10,7 +10,6 @@
 def parse_nodes():
     """Read node names until START keyword"""
     nodes = []
-    print("Parsing nodes...")
     
     try:
         while True:
@@ -127,9 +126,9 @@ def print_distance_tables(distance_tables, nodes, time_step):
             print()
         print()  # Blank line
 
-def run_dv_algorithm(nodes, topology, distance_tables):
+def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
     """Run Distance Vector algorithm until convergence"""
-    time_step = 0
+    time_step = start_time
     print_distance_tables(distance_tables, nodes, time_step)
     
     while True:
@@ -155,9 +154,9 @@ def run_dv_algorithm(nodes, topology, distance_tables):
                             
                             # Find best distance from neighbor to dest
                             best_neighbor_dist = float('inf')
-                            for via in distance_tables[neighbor][dest]:
-                                if distance_tables[neighbor][dest][via] < best_neighbor_dist:
-                                    best_neighbor_dist = distance_tables[neighbor][dest][via]
+                            for via in old_tables[neighbor][dest]:
+                                if old_tables[neighbor][dest][via] < best_neighbor_dist:  
+                                    best_neighbor_dist = old_tables[neighbor][dest][via]
                             
                             new_dist = neighbor_cost + best_neighbor_dist
                             distance_tables[node][dest][neighbor] = min(current_dist, new_dist)
@@ -179,8 +178,9 @@ def run_dv_algorithm(nodes, topology, distance_tables):
             print_routing_tables(routing_tables, nodes)
             break
         
-        if time_step > 10:  # Safety limit
+        if time_step > 20:  # Safety limit
             break
+    return time_step
 def generate_routing_tables(nodes, distance_tables):
     """Generate routing tables from distance tables"""
     routing_tables = {}
@@ -254,7 +254,7 @@ def main():
     
     # Phase 2: Run first DV algorithm (after UPDATE keyword)
     distance_tables = initialize_distance_tables(nodes, topology)
-    run_dv_algorithm(nodes, topology, distance_tables)
+    final_time = run_dv_algorithm(nodes, topology, distance_tables, 0)
     
     # Phase 3: Parse updates and run second algorithm (after END keyword)
     updates = parse_updates()
@@ -263,7 +263,7 @@ def main():
     if updates:
         apply_topology_updates(topology, updates, nodes)
         distance_tables = initialize_distance_tables(nodes, topology)
-        run_dv_algorithm(nodes, topology, distance_tables)
+        run_dv_algorithm(nodes, topology, distance_tables, final_time)
     
 
 if __name__ == "__main__":
