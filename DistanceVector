@@ -2,7 +2,41 @@
 
 # DV Routing Algorithm Implementation
 # Assignment3 Network_routing
+#!/usr/bin/env python3
 
+# Distance Vector Routing Algorithm Implementation
+# Assignment: Network Routing Protocols
+
+def parse_nodes():
+    """Read node names until START """
+    print("Parsing nodes...")
+    # TODO: Implement in next step
+    pass
+
+def parse_initial_topology():
+    """Read topology links until UPDATE keyword"""
+    print("Parsing initial topology...")
+    # TODO: Implement in next step
+    pass
+
+def parse_updates():
+    """Read topology updates until END keyword"""
+    print("Parsing updates...")
+    # TODO: Implement in next step  
+    pass
+
+def main():
+    print("Distance Vector Algorithm Starting...")
+    
+    # Three-phase input parsing
+    parse_nodes()
+    parse_initial_topology()
+    parse_updates()
+    
+    print("Input parsing complete")
+
+if __name__ == "__main__":
+    main()
 def main():
     print("Distance Vector Algorithm Starting...")
     # TODO: Implementation 
