@@ -1,4 +1,5 @@
 # Distance Vector Assignment Roadmap
+# this road map draft template created via AI 
 
 ## Stage 1: Foundation & Understanding (Days 1-2)
 
