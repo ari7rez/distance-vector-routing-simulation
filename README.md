@@ -124,6 +124,7 @@ Step 10 Tasks:
 - [x] Implement best route selection with tie-breaking
 - [x] Print routing tables in CSV format
 - [x] Commit:"Implement routing table generation and printing"
+- [x] Fix duplicate convergence blocks bug
 
 ### 4.2 Initial Testing
 

@@ -185,15 +185,12 @@ def run_dv_algorithm(nodes, topology, distance_tables):
         
         if converged:
             print("Algorithm converged!")
+            routing_tables = generate_routing_tables(nodes, distance_tables)
+            print_routing_tables(routing_tables, nodes)
             break
         
         if time_step > 10:  # Safety limit
             print("Max iterations reached")
-        if converged:
-            print("Algorithm converged!")
-            # Generate and print routing tables
-            routing_tables = generate_routing_tables(nodes, distance_tables)
-            print_routing_tables(routing_tables, nodes)
             break
 def generate_routing_tables(nodes, distance_tables):
     """Generate routing tables from distance tables"""
