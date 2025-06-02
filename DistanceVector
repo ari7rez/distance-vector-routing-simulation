@@ -230,30 +230,56 @@ def print_routing_tables(routing_tables, nodes):
                 print(f"{dest},{next_hop},{cost}")
         print()  # Blank line between tables
 
+def apply_topology_updates(topology, updates, nodes):
+    """Apply topology updates including link removal (-1) and new links"""
+    for node1, node2, weight in updates:
+        # Add new nodes if they don't exist
+        if node1 not in nodes:
+            nodes.append(node1)
+        if node2 not in nodes:
+            nodes.append(node2)
+            
+        # Initialize topology entries if needed
+        if node1 not in topology:
+            topology[node1] = {}
+        if node2 not in topology:
+            topology[node2] = {}
+            
+        if weight == -1:
+            # Remove link
+            if node2 in topology[node1]:
+                del topology[node1][node2]
+            if node1 in topology[node2]:
+                del topology[node2][node1]
+        else:
+            # Add or update link
+            topology[node1][node2] = weight
+            topology[node2][node1] = weight
+    
+    print(f"Applied updates: {updates}")
+    print(f"Updated topology: {topology}")
+
 def main():
     print("Distance Vector Algorithm Starting...")
     
-    # Three-phase input parsing
+    # Phase 1: Parse nodes and initial topology
     nodes = parse_nodes()
     topology = parse_initial_topology()
-    updates = parse_updates()
     
-    # Initialize and run DV algorithm
+    # Phase 2: Run first DV algorithm (after UPDATE keyword)
     distance_tables = initialize_distance_tables(nodes, topology)
     run_dv_algorithm(nodes, topology, distance_tables)
     
-    print("Input parsing complete")
-
-if __name__ == "__main__":
-    main()
-def main():
-    print("Distance Vector Algorithm Starting...")
-    # Three-phase input parsing
-    nodes = parse_nodes()
-    parse_initial_topology()
-    parse_updates()
+    # Phase 3: Parse updates and run second algorithm (after END keyword)
+    updates = parse_updates()
     
-    print("Input parsing complete") 
+    # Apply updates to topology if any exist
+    if updates:
+        apply_topology_updates(topology, updates, nodes)
+        distance_tables = initialize_distance_tables(nodes, topology)
+        run_dv_algorithm(nodes, topology, distance_tables)
+    
+    print("Program complete")
 
 if __name__ == "__main__":
     main()

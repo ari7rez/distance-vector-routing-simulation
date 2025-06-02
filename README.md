@@ -128,15 +128,19 @@ Step 10 Tasks:
 
 ### 4.2 Initial Testing
 
-Files to create:
-- `test_script.sh` - Automated testing script
-- `results/` directory for test outputs
-
 Tasks:
 - [x] Test with sample topology
 - [x] Compare output with manual calculations
 - [x] Fix any discrepancies
--
+
+Step 11 Tasks (FINAL STEP):
+- [x] Restructure main() to handle UPDATE and END triggers
+- [x] Implement apply_topology_updates() function
+- [x] Handle link removal with -1 weight values
+- [x] Handle new node addition in updates
+- [x] Run DV algorithm twice with topology changes
+- [x] Test complete assignment with sample input
+- [x] Commit: "ASSIGNMENT COMPLETE - Successfully implemented topology updates and dual algorithm runs"
 
 ### 4.3 Gradescope Submission #1
 
