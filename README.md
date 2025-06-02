@@ -52,9 +52,9 @@
 - `test_cases/expected_output_3node.txt` - Expected results
 
 **Tasks:**
-- [ ] Create 2-3 simple test topologies
-- [ ] Manually calculate expected outputs
-- [ ] **Commit:** "Add initial test cases and expected outputs"
+- [x] Create 2-3 simple test topologies
+- [x] Manually calculate expected outputs
+- [x] **Commit:** "Add initial test cases and expected outputs"
 
 ---
 
@@ -66,7 +66,7 @@
 - `DistanceVector` (Python file)
 
 **Tasks:**
-- [ ] Add shebang: `#!/usr/bin/env python3`
+- [x] Add shebang: `#!/usr/bin/env python3`
 - [ ] Implement topology input parsing
 - [ ] Test with sample input
 - [ ] **Commit:** "Implement topology input parsing"
