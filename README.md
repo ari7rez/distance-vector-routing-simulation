@@ -85,11 +85,11 @@ Step 5 Tasks:
 
 ### 3.2 Data Structure Setup
 
-Tasks:
-- [] Implement distance table initialization
-- [] Implement routing table structures
-- [] Add debug output for verification
-- [] Commit: "Add distance and routing table data structures"
+Step 6 Tasks:
+- [x] Implement distance table initialization
+- [x] Implement routing table structures
+- [x] Add debug output for verification
+- [x] Commit: "Add distance and routing table data structures"
 
 ### 3.3 Basic DV Algorithm
 

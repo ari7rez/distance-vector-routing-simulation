@@ -78,6 +78,22 @@ def parse_updates():
     print(f"Parsed updates: {updates}")
     return updates
     pass
+def initialize_distance_tables(nodes, topology):
+    """Initialize distance tables for all nodes"""
+    distance_tables = {}
+    
+    for node in nodes:
+        distance_tables[node] = {}
+        for dest in nodes:
+            if dest != node:  # Don't need route to self
+                distance_tables[node][dest] = {}
+                for neighbor in nodes:
+                    if neighbor != node:  # Don't route via self
+                        # TODO: Set initial distances
+                        pass
+    
+    print("Initialized distance tables")
+    return distance_tables
 
 def main():
     print("Distance Vector Algorithm Starting...")
@@ -87,8 +103,11 @@ def main():
     topology = parse_initial_topology()
     updates = parse_updates()
     
+    # Initialize distance tables
+    distance_tables = initialize_distance_tables(nodes, topology)
+    
     print("Input parsing complete")
-
+    
 if __name__ == "__main__":
     main()
 def main():
