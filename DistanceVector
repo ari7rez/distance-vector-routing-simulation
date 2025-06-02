@@ -135,6 +135,62 @@ def print_distance_tables(distance_tables, nodes, time_step):
         
         print()  # Blank line between tables
 
+def run_dv_algorithm(nodes, topology, distance_tables):
+    """Run Distance Vector algorithm until convergence"""
+    time_step = 0
+    print_distance_tables(distance_tables, nodes, time_step)
+    
+    while True:
+        time_step += 1
+        print(f"Running DV algorithm round {time_step}")
+        
+        # Store old tables for convergence check
+        old_tables = {}
+        for node in nodes:
+            old_tables[node] = {}
+            for dest in nodes:
+                if dest != node:
+                    old_tables[node][dest] = distance_tables[node][dest].copy()
+        
+        # Update distance tables using DV equation
+        for node in nodes:
+            for dest in nodes:
+                if dest != node:
+                    for neighbor in topology.get(node, {}):
+                        if neighbor != dest:  # Don't route to dest via dest
+                            # DV equation: min(current, cost_to_neighbor + neighbor_distance_to_dest)
+                            current_dist = distance_tables[node][dest][neighbor]
+                            neighbor_cost = topology[node][neighbor]
+                            
+                            # Find best distance from neighbor to dest
+                            best_neighbor_dist = float('inf')
+                            for via in distance_tables[neighbor][dest]:
+                                if distance_tables[neighbor][dest][via] < best_neighbor_dist:
+                                    best_neighbor_dist = distance_tables[neighbor][dest][via]
+                            
+                            new_dist = neighbor_cost + best_neighbor_dist
+                            distance_tables[node][dest][neighbor] = min(current_dist, new_dist)
+        
+        print_distance_tables(distance_tables, nodes, time_step)
+        
+        # Check convergence (simplified for now)
+        converged = True
+        for node in nodes:
+            for dest in nodes:
+                if dest != node:
+                    for neighbor in distance_tables[node][dest]:
+                        if distance_tables[node][dest][neighbor] != old_tables[node][dest].get(neighbor, float('inf')):
+                            converged = False
+                            break
+        
+        if converged:
+            print("Algorithm converged!")
+            break
+        
+        if time_step > 10:  # Safety limit
+            print("Max iterations reached")
+            break
+
 def main():
     print("Distance Vector Algorithm Starting...")
     
@@ -143,11 +199,9 @@ def main():
     topology = parse_initial_topology()
     updates = parse_updates()
     
-    # Initialize distance tables
+    # Initialize and run DV algorithm
     distance_tables = initialize_distance_tables(nodes, topology)
-    
-    # Test printing distance tables
-    print_distance_tables(distance_tables, nodes, 0)
+    run_dv_algorithm(nodes, topology, distance_tables)
     
     print("Input parsing complete")
 

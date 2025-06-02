@@ -100,10 +100,10 @@ Step 7 Tasks:
 ### 3.3 Basic DV Algorithm
 
 Tasks:
-- [ ] Implement distance vector exchange
-- [ ] Implement table updates
-- [ ] Add convergence detection
-- [ ] Commit: "Implement core Distance Vector algorithm"
+- [x] Implement distance vector exchange
+- [x] Implement table updates
+- [x] Add convergence detection
+- [x] Commit: "Implement core Distance Vector algorithm"
 
 ---
 
