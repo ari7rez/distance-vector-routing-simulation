@@ -89,10 +89,20 @@ def initialize_distance_tables(nodes, topology):
                 distance_tables[node][dest] = {}
                 for neighbor in nodes:
                     if neighbor != node:  # Don't route via self
-                        # TODO: Set initial distances
-                        pass
+                        # Check if neighbor is directly connected to current node
+                        if neighbor in topology.get(node, {}):
+                            # Direct neighbor - check if it connects to destination
+                            if dest == neighbor:
+                                # Direct route to neighbor
+                                distance_tables[node][dest][neighbor] = topology[node][neighbor]
+                            else:
+                                # Route via neighbor to destination (unknown initially)
+                                distance_tables[node][dest][neighbor] = float('inf')
+                        else:
+                            # Not a direct neighbor - can't route through it
+                            distance_tables[node][dest][neighbor] = float('inf')
     
-    print("Initialized distance tables")
+    print("Initialized distance tables with direct costs and INF")
     return distance_tables
 
 def main():
@@ -107,7 +117,7 @@ def main():
     distance_tables = initialize_distance_tables(nodes, topology)
     
     print("Input parsing complete")
-    
+
 if __name__ == "__main__":
     main()
 def main():

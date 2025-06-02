@@ -91,6 +91,12 @@ Step 6 Tasks:
 - [x] Add debug output for verification
 - [x] Commit: "Add distance and routing table data structures"
 
+Step 7 Tasks:
+- [x] Implement distance initialization logic
+- [x] Set direct neighbor costs from topology
+- [x] Set INF for non-neighbor routes  
+- [x] Commit:"Implement distance table initialization logic"
+
 ### 3.3 Basic DV Algorithm
 
 Tasks:
