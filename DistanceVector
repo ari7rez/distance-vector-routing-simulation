@@ -105,26 +105,27 @@ def print_distance_tables(distance_tables, nodes, time_step):
         
         other_nodes = sorted([n for n in nodes if n != node])
         
-        # Print header with exact spacing
-        print("    ", end="")
+        # Print header row with exact spacing
+        print("     ", end="")  # 5 spaces
         for neighbor in other_nodes:
-            print(f" {neighbor:4}", end="")
+            print(f"{neighbor:<4} ", end="")  # 4 chars + space
         print()
         
-        # Print rows with exact spacing
+        # Print each destination row
         for dest in other_nodes:
-            print(f"{dest:4}", end="")
+            print(f"{dest:<4} ", end="")  # 4 chars + space
             for neighbor in other_nodes:
                 if neighbor in distance_tables[node][dest]:
                     dist = distance_tables[node][dest][neighbor]
                     if dist == float('inf'):
-                        print(f" {'INF':4}", end="")
+                        print(f"{'INF':<4} ", end="")
                     else:
-                        print(f" {dist:4}", end="")
+                        print(f"{dist:<4} ", end="")
                 else:
-                    print(f" {'INF':4}", end="")
+                    print(f"{'INF':<4} ", end="")
             print()
-        print()  # Blank line
+        
+        print()  # Blank line between tables
 
 def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
     """Run Distance Vector algorithm until convergence"""
