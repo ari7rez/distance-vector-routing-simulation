@@ -169,10 +169,16 @@ def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
         for node in nodes:
             for dest in nodes:
                 if dest != node:
-                    for neighbor in distance_tables[node][dest]:
-                        if distance_tables[node][dest][neighbor] != old_tables[node][dest].get(neighbor, float('inf')):
+                    for neighbor in nodes:
+                         current_dist = distance_tables[node][dest].get(neighbor, float('inf'))
+                         old_dist = old_tables[node][dest].get(neighbor, float('inf'))
+                         if current_dist != old_dist:
                             converged = False
                             break
+                if not converged:
+                    break
+            if not converged:
+                break
         
         if converged:
             routing_tables = generate_routing_tables(nodes, distance_tables)
@@ -213,13 +219,14 @@ def generate_routing_tables(nodes, distance_tables):
 def print_routing_tables(routing_tables, nodes):
     """Print routing tables in required format"""
     for node in sorted(nodes):
+        print(f"Routing Table of router {node}:")
         for dest in sorted(nodes):
             if dest != node:
                 next_hop, cost = routing_tables[node][dest]
                 print(f"{dest},{next_hop},{cost}")
         print()  # Blank line between tables
 
-def apply_topology_updates(topology, updates, nodes):
+def apply_topology_updates(topology, updates, nodes, distance_tables):
     """Apply topology updates including link removal (-1) and new links"""
     for node1, node2, weight in updates:
         # Add new nodes if they don't exist
@@ -227,24 +234,39 @@ def apply_topology_updates(topology, updates, nodes):
             nodes.append(node1)
         if node2 not in nodes:
             nodes.append(node2)
-            
+
         # Initialize topology entries if needed
         if node1 not in topology:
             topology[node1] = {}
         if node2 not in topology:
             topology[node2] = {}
-            
+
         if weight == -1:
-            # Remove link
+            # Remove link from topology
             if node2 in topology[node1]:
                 del topology[node1][node2]
             if node1 in topology[node2]:
                 del topology[node2][node1]
+
+            # Invalidate all routes via node1 or node2
+            for node in nodes:
+                for dest in distance_tables[node]:
+                    for via in [node1, node2]:
+                        if via in distance_tables[node][dest]:
+                            distance_tables[node][dest][via] = float('inf')
+
+            # Invalidate all routes to node1 or node2
+            for node in nodes:
+                for dest in [node1, node2]:
+                    if dest in distance_tables[node]:
+                        for via in distance_tables[node][dest]:
+                            distance_tables[node][dest][via] = float('inf')
+
         else:
-            # Add or update link
+            # Add or update the link in topology
             topology[node1][node2] = weight
             topology[node2][node1] = weight
-    
+
 
 
 def main():
@@ -262,7 +284,7 @@ def main():
     
     # Apply updates to topology if any exist
     if updates:
-        apply_topology_updates(topology, updates, nodes)
+        apply_topology_updates(topology, updates, nodes, distance_tables)
         distance_tables = initialize_distance_tables(nodes, topology)
         run_dv_algorithm(nodes, topology, distance_tables, final_time)
     

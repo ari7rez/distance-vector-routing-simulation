@@ -152,7 +152,7 @@ Tasks:
 ---
 
 ## Stage 5: Enhanced Testing (Days 7-9)
-Step 13
+Step 13-16
 
 - [x] Remove all debug print statements for Gradescope compatibility
 - [x] Fix algorithm calculation bug - use old_tables for synchronous updates
@@ -162,6 +162,7 @@ Step 13
 - [x] Fix time sequence
 - [ ] Pass Gradescope acceptance tests
 - [x] Commit:"Fixed DV equation to use previous round data for synchronous updates"
+- [x] fixed more bugs and Enhanced apply_topology_updates()
 ### 5.1 Additional Test Cases
 
 Files to create:
