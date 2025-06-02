@@ -58,8 +58,25 @@ def parse_initial_topology():
 
 def parse_updates():
     """Read topology updates until END keyword"""
+    updates = []
     print("Parsing updates...")
-    # TODO: Implement in next step  
+    
+    try:
+        while True:
+            line = input().strip()
+            if line == "END":
+                break
+            
+            # Parse "X Y 3" or "X Y -1" format
+            parts = line.split()
+            node1, node2, weight = parts[0], parts[1], int(parts[2])
+            updates.append((node1, node2, weight))
+            
+    except EOFError:
+        print("Warning: Reached end of input while parsing updates")
+    
+    print(f"Parsed updates: {updates}")
+    return updates
     pass
 
 def main():
@@ -68,7 +85,7 @@ def main():
     # Three-phase input parsing
     nodes = parse_nodes()
     topology = parse_initial_topology()
-    parse_updates()
+    updates = parse_updates()
     
     print("Input parsing complete")
 

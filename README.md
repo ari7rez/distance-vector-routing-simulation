@@ -5,22 +5,22 @@
 
 ### 1.1 Study Phase
 
-**Tasks:**
+Tasks:
 - [X] Read DV algorithm in course notes & Kurose-Ross 5.2.2
 - [X] Study Wikipedia DV entry
-- [X] **Commit:** "Initial algorithm study - key concepts understood"
+- [X] Commit: "Initial algorithm study - key concepts understood"
 
 ### 1.2 Manual Calculation Practice
 
-**Files to create:**
+Files to create:
 - `manual_calculations.md` - Your hand-worked examples
 - `sample_topology.txt` - Copy the provided sample input
 
-**Tasks:**
+Tasks:
 - [X] Manually work through the sample topology step-by-step
 - [X] Calculate expected distance tables for each round
 - [X] Calculate final routing tables
-- [X] **Commit:** "Manual calculation complete - understand convergence"
+- [X] Commit: "Manual calculation complete - understand convergence"
 
 ---
 
@@ -28,11 +28,11 @@
 
 ### 2.1 Implementation Planning
 
-**Files to create:**
+Files to create:
 - `design.md` - Your implementation plan
 - `data_structures.md` - Planned data structures
 
-**Tasks:**
+Tasks:
 - [x] Choose Python as language
 - [x] Design data structures:
   ```python
@@ -42,19 +42,19 @@
   ```
 - [x] Plan input parsing strategy
 - [x] Plan output formatting
-- [x] **Commit:** "Add design documentation and data structure planning"
+- [x] Commit: "Add design documentation and data structure planning"
 
 ### 2.2 Test Case Planning
 
-**Files to create:**
+Files to create:
 - `test_cases/` directory
 - `test_cases/simple_3node.txt` - Basic 3-node test
 - `test_cases/expected_output_3node.txt` - Expected results
 
-**Tasks:**
+Tasks:
 - [x] Create 2-3 simple test topologies
 - [x] Manually calculate expected outputs
-- [x] **Commit:** "Add initial test cases and expected outputs"
+- [x] Commit: "Add initial test cases and expected outputs"
 
 ---
 
@@ -62,36 +62,42 @@
 
 ### 3.1 Input Parsing
 
-**Files to create:**
+Files to create:
 - `DistanceVector` (Python file)
 
-**Step 3 Tasks:**
+Step 3 Tasks:
 - [x] Add shebang: `#!/usr/bin/env python3`
 - [x] Implement topology input parsing
 - [x] Test with sample input
-- [x] **Commit:** "Implement topology input parsing"
+- [x] Commit: "Implement topology input parsing"
 
-**Step 4 Tasks:**
+Step 4 Tasks:
 - [X] Implement update parsing until END keyword
 - [X] Handle -1 weight values for link removal  
 - [X] Test with complete sample input
-- [X] **Commit:** "Implement topology update parsing"
+- [X] Commit: "Implement topology update parsing"
+
+Step 5 Tasks:
+- [X] Implement update parsing until END keyword
+- [X] Handle -1 weight values for link removal
+- [X] Test with complete sample input
+- [X] Commit: "Implement topology update parsing"
 
 ### 3.2 Data Structure Setup
 
-**Tasks:**
+Tasks:
 - [] Implement distance table initialization
 - [] Implement routing table structures
 - [] Add debug output for verification
-- [] **Commit:** "Add distance and routing table data structures"
+- [] Commit: "Add distance and routing table data structures"
 
 ### 3.3 Basic DV Algorithm
 
-**Tasks:**
+Tasks:
 - [ ] Implement distance vector exchange
 - [ ] Implement table updates
 - [ ] Add convergence detection
-- [ ] **Commit:** "Implement core Distance Vector algorithm"
+- [ ] Commit: "Implement core Distance Vector algorithm"
 
 ---
 
@@ -99,32 +105,32 @@
 
 ### 4.1 Output Formatting
 
-**Files to create:**
+Files to create:
 - `output_formatter.py` (if you modularize)
 
-**Tasks:**
+Tasks:
 - [ ] Implement required output format
 - [ ] Test output against expected format
-- [ ] **Commit:** "Implement required output formatting"
+- [ ] Commit: "Implement required output formatting"
 
 ### 4.2 Initial Testing
 
-**Files to create:**
+Files to create:
 - `test_script.sh` - Automated testing script
 - `results/` directory for test outputs
 
-**Tasks:**
+Tasks:
 - [ ] Test with sample topology
 - [ ] Compare output with manual calculations
 - [ ] Fix any discrepancies
-- [ ] **Commit:** "Fix algorithm issues found in testing"
+- [ ] Commit: "Fix algorithm issues found in testing"
 
 ### 4.3 Gradescope Submission #1
 
-**Tasks:**
+Tasks:
 - [ ] Submit to Gradescope for acceptance testing
 - [ ] Fix any issues found
-- [ ] **Commit:** "Fix issues from Gradescope acceptance testing"
+- [ ] Commit: "Fix issues from Gradescope acceptance testing"
 
 ---
 
@@ -132,25 +138,25 @@
 
 ### 5.1 Additional Test Cases
 
-**Files to create:**
+Files to create:
 - `test_cases/complex_topology.txt`
 - `test_cases/link_failure.txt`
 - `test_cases/various_weights.txt`
 
-**Tasks:**
+Tasks:
 - [ ] Create and test multiple topologies
 - [ ] Test topology updates/changes
 - [ ] Verify convergence in all cases
-- [ ] **Commit:** "Add comprehensive test suite and fix edge cases"
+- [ ] Commit: "Add comprehensive test suite and fix edge cases"
 
 ### 5.2 Code Quality Review
 
-**Tasks:**
+Tasks:
 - [ ] Add method documentation
 - [ ] Clean up variable names
 - [ ] Remove magic numbers
 - [ ] Ensure methods < 80 lines
-- [ ] **Commit:** "Code quality improvements and documentation"
+- [ ] Commit: "Code quality improvements and documentation"
 
 ---
 
@@ -158,21 +164,21 @@
 
 ### 6.1 Algorithm Study
 
-**Tasks:**
+Tasks:
 - [ ] Study poisoned reverse mechanism
 - [ ] Plan implementation differences
-- [ ] **Commit:** "Studied poisoned reverse algorithm"
+- [ ] Commit: "Studied poisoned reverse algorithm"
 
 ### 6.2 Implementation
 
-**Files to create:**
+Files to create:
 - `PoisonedReverse` (Python file)
 
-**Tasks:**
+Tasks:
 - [ ] Copy DistanceVector as starting point
 - [ ] Implement poisoned reverse logic
 - [ ] Test with same topologies
-- [ ] **Commit:** "Implement poisoned reverse algorithm"
+- [ ] Commit: "Implement poisoned reverse algorithm"
 
 ---
 
@@ -180,23 +186,23 @@
 
 ### 7.1 Final Validation
 
-**Tasks:**
+Tasks:
 - [ ] Test both programs thoroughly
 - [ ] Verify all edge cases
 - [ ] Clean up any remaining issues
-- [ ] **Commit:** "Final testing and bug fixes"
+- [ ] Commit: "Final testing and bug fixes"
 
 ### 7.2 Submission Preparation
 
-**Files to check:**
+Files to check:
 - [ ] `DistanceVector` (working Python file)
 - [ ] `PoisonedReverse` (working Python file, if doing bonus)
 - [ ] All test cases and documentation
 
-**Tasks:**
+Tasks:
 - [ ] Final Gradescope submission
 - [ ] Verify GitHub repository is complete
-- [ ] **Commit:** "Final submission ready"
+- [ ] Commit: "Final submission ready"
 
 ---
 
@@ -235,11 +241,11 @@ Testing results:
 
 ## Key Success Factors
 
-1. **Commit frequently** - Aim for 1-2 commits per day minimum
-2. **Use detailed commit messages** - Document learning progression
-3. **Test early and often** - Don't wait until the end
-4. **Start with simple cases** - Build complexity gradually
-5. **Use Gradescope early** - Don't wait for perfection
+1. Commit frequently - Aim for 1-2 commits per day minimum
+2. Use detailed commit messages - Document learning progression
+3. Test early and often - Don't wait until the end
+4. Start with simple cases - Build complexity gradually
+5. Use Gradescope early - Don't wait for perfection
 
 ---
 
