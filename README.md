@@ -99,7 +99,7 @@ Step 7 Tasks:
 
 ### 3.3 Basic DV Algorithm
 
-Tasks:
+step 8 Tasks:
 - [x] Implement distance vector exchange
 - [x] Implement table updates
 - [x] Add convergence detection
@@ -111,13 +111,13 @@ Tasks:
 
 ### 4.1 Output Formatting
 
-Files to create:
-- `output_formatter.py` (if you modularize)
 
-Tasks:
-- [ ] Implement required output format
-- [ ] Test output against expected format
-- [ ] Commit: "Implement required output formatting"
+
+Step 9 Tasks:
+- [x] Implement required output format
+- [x] Test output against expected format
+- [x] Test algorithm convergence in 3 rounds
+- [x] Commit: "Implement required output formatting"
 
 ### 4.2 Initial Testing
 
