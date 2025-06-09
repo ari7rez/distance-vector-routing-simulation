@@ -421,9 +421,9 @@ def main():
     # Track initial neighbors
     track_neighbors(topology, ever_neighbors)
     
-    # Phase 2: Run first DV algorithm
+    # Phase 2: Run first DV algorithm with Poisoned Reverse
     distance_tables = initialize_distance_tables_with_history(nodes, topology, ever_neighbors)
-    final_time = run_dv_algorithm_fixed(nodes, topology, distance_tables, 0, ever_neighbors)
+    final_time = run_dv_algorithm_with_pr(nodes, topology, distance_tables, 0, ever_neighbors)
     
     # Save routing tables before updates
     routing_tables = generate_routing_tables(nodes, distance_tables)
@@ -447,7 +447,7 @@ def main():
         )
         
         # Continue from previous time step + 1
-        run_dv_algorithm_fixed(nodes, topology, distance_tables, final_time + 1, ever_neighbors)
+        run_dv_algorithm_with_pr(nodes, topology, distance_tables, final_time + 1, ever_neighbors)
 
 if __name__ == "__main__":
     main()
