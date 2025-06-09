@@ -253,9 +253,9 @@ Files to check:
 - [x] All test cases and documentation
 
 Tasks:
-- [ ] Final Gradescope submission
-- [ ] Verify GitHub repository is complete
-- [ ] Commit: "Final submission ready"
+- [x] Final Gradescope submission
+- [X] Verify GitHub repository is complete
+- [x] Commit: "Final submission ready"
 
 ---
 
@@ -311,14 +311,14 @@ Testing results:
 - Commit messages must show what you learned and challenges faced
 
 ### Code Quality Checklist
-- [ ] Comments above each method header (purpose, inputs, outputs)
-- [ ] Special cases documented in comments
-- [ ] Modular code following cohesion/coupling principles
-- [ ] No magic numbers
-- [ ] Proper variable names (not incomprehensible)
-- [ ] Methods under 80 lines
-- [ ] No TODO blocks remaining
-- [ ] No spelling errors in comments
+- [x] Comments above each method header (purpose, inputs, outputs)
+- [x] Special cases documented in comments
+- [x] Modular code following cohesion/coupling principles
+- [x] No magic numbers
+- [x] Proper variable names (not incomprehensible)
+- [x] Methods under 80 lines
+- [x] No TODO blocks remaining
+- [X] No spelling errors in comments
 
 ### Testing Strategy
 - [x] Manual calculation of expected results BEFORE coding
