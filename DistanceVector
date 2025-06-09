@@ -217,7 +217,7 @@ def run_dv_algorithm_fixed(nodes, topology, distance_tables, start_time=0, ever_
     print_routing_tables(routing_tables, nodes)
     
     return time_step
-    
+
 def generate_routing_tables(nodes, distance_tables):
     """Generate routing tables from distance tables"""
     routing_tables = {}
@@ -256,47 +256,80 @@ def print_routing_tables(routing_tables, nodes):
                 print(f"{dest},{next_hop},{cost}")
         print()  # Blank line between tables
 
-def apply_topology_updates(topology, updates, nodes, distance_tables):
-    """Apply topology updates including link removal (-1) and new links"""
+def apply_topology_updates_with_preservation(topology, updates, nodes, distance_tables, routing_tables):
+    """Apply topology updates while preserving previous routing information"""
+    # Save previous minimum costs from routing tables
+    previous_min_costs = {}
+    for node in nodes:
+        previous_min_costs[node] = {}
+        for dest in nodes:
+            if dest != node and node in routing_tables and dest in routing_tables[node]:
+                _, cost = routing_tables[node][dest]
+                previous_min_costs[node][dest] = cost
+            else:
+                previous_min_costs[node][dest] = float('inf')
+    
+    # Apply updates
     for node1, node2, weight in updates:
         # Add new nodes if they don't exist
         if node1 not in nodes:
             nodes.append(node1)
+            previous_min_costs[node1] = {}
         if node2 not in nodes:
             nodes.append(node2)
-
+            previous_min_costs[node2] = {}
+        
         # Initialize topology entries if needed
         if node1 not in topology:
             topology[node1] = {}
         if node2 not in topology:
             topology[node2] = {}
-
+        
         if weight == -1:
             # Remove link from topology
             if node2 in topology[node1]:
                 del topology[node1][node2]
             if node1 in topology[node2]:
                 del topology[node2][node1]
-
-            # Invalidate all routes via node1 or node2
-            for node in nodes:
-                for dest in distance_tables[node]:
-                    for via in [node1, node2]:
-                        if via in distance_tables[node][dest]:
-                            distance_tables[node][dest][via] = float('inf')
-
-            # Invalidate all routes to node1 or node2
-            for node in nodes:
-                for dest in [node1, node2]:
-                    if dest in distance_tables[node]:
-                        for via in distance_tables[node][dest]:
-                            distance_tables[node][dest][via] = float('inf')
-
         else:
             # Add or update the link in topology
             topology[node1][node2] = weight
             topology[node2][node1] = weight
+    
+    return previous_min_costs
 
+def initialize_distance_tables_with_history(nodes, topology, ever_neighbors, previous_min_costs=None):
+    """Initialize distance tables using previous routing information if available"""
+    distance_tables = {}
+    
+    for node in nodes:
+        distance_tables[node] = {}
+        for dest in nodes:
+            if dest != node:
+                distance_tables[node][dest] = {}
+                
+                # Check all neighbors that ever existed
+                for neighbor in ever_neighbors.get(node, set()):
+                    if neighbor in topology.get(node, {}):
+                        # Current neighbor
+                        if dest == neighbor:
+                            # Direct link to neighbor
+                            distance_tables[node][dest][neighbor] = topology[node][neighbor]
+                        elif previous_min_costs and neighbor in previous_min_costs and dest in previous_min_costs[neighbor]:
+                            # Use previous routing info
+                            link_cost = topology[node][neighbor]
+                            neighbor_min = previous_min_costs[neighbor][dest]
+                            if neighbor_min < float('inf'):
+                                distance_tables[node][dest][neighbor] = link_cost + neighbor_min
+                            else:
+                                distance_tables[node][dest][neighbor] = float('inf')
+                        else:
+                            distance_tables[node][dest][neighbor] = float('inf')
+                    else:
+                        # No longer a neighbor
+                        distance_tables[node][dest][neighbor] = float('inf')
+    
+    return distance_tables
 
 def track_neighbors(topology, ever_neighbors):
     """Track all neighbors that have ever existed for each node"""
