@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 
-# DV Routing Algorithm Implementation
 # Assignment3 Network_routing
-#!/usr/bin/env python3
-
 # Distance Vector Routing Algorithm Implementation
-# Assignment: Network Routing Protocols
 
 def parse_nodes():
     """Read node names until START keyword"""
@@ -127,7 +123,7 @@ def print_distance_tables(distance_tables, nodes, time_step):
         
         print()  # Blank line between tables
 
-def def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
+def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
     """Run Distance Vector algorithm until convergence"""
     time_step = start_time
     print_distance_tables(distance_tables, nodes, time_step)
