@@ -1,0 +1,422 @@
+#!/usr/bin/env python3
+
+# Assignment3 Network_routing
+# Distance Vector Routing Algorithm Implementation
+
+def parse_nodes():
+    """Read node names until START keyword"""
+    nodes = []
+    
+    try:
+        while True:
+            line = input().strip()
+            if line == "START":
+                break
+            nodes.append(line)
+    except EOFError:
+        print("Warning: Reached end of input while parsing nodes")
+    
+    return nodes
+    pass
+
+def parse_initial_topology():
+    """Read topology links until UPDATE keyword"""
+    topology = {}
+    
+    try:
+        while True:
+            line = input().strip()
+            if line == "UPDATE":
+                break
+            
+            # Parse "X Y 3" format
+            parts = line.split()
+            node1, node2, weight = parts[0], parts[1], int(parts[2])
+            
+            # Store bidirectional links
+            if node1 not in topology:
+                topology[node1] = {}
+            if node2 not in topology:
+                topology[node2] = {}
+                
+            topology[node1][node2] = weight
+            topology[node2][node1] = weight
+            
+    except EOFError:
+        print("Warning: Reached end of input while parsing topology")
+    
+    return topology
+    pass
+
+def parse_updates():
+    """Read topology updates until END keyword"""
+    updates = []
+    
+    try:
+        while True:
+            line = input().strip()
+            if line == "END":
+                break
+            
+            # Parse "X Y 3" or "X Y -1" format
+            parts = line.split()
+            node1, node2, weight = parts[0], parts[1], int(parts[2])
+            updates.append((node1, node2, weight))
+            
+    except EOFError:
+        print("Warning: Reached end of input while parsing updates")
+    
+    return updates
+    pass
+def initialize_distance_tables(nodes, topology):
+    """Initialize distance tables for all nodes"""
+    distance_tables = {}
+    
+    for node in nodes:
+        distance_tables[node] = {}
+        for dest in nodes:
+            if dest != node:  # Don't need route to self
+                distance_tables[node][dest] = {}
+                for neighbor in nodes:
+                    if neighbor != node:  # Don't route via self
+                        # Check if neighbor is directly connected to current node
+                        if neighbor in topology.get(node, {}):
+                            # Direct neighbor - check if it connects to destination
+                            if dest == neighbor:
+                                # Direct route to neighbor
+                                distance_tables[node][dest][neighbor] = topology[node][neighbor]
+                            else:
+                                # Route via neighbor to destination (unknown initially)
+                                distance_tables[node][dest][neighbor] = float('inf')
+                        else:
+                            # Not a direct neighbor - can't route through it
+                            distance_tables[node][dest][neighbor] = float('inf')
+    
+    return distance_tables
+
+def print_distance_tables(distance_tables, nodes, time_step, topology):
+    """Print distance tables in required format - only show neighbors as columns"""
+    for node in sorted(nodes):
+        print(f"Distance Table of router {node} at t={time_step}:")
+        
+        # Get neighbors for this node
+        neighbors = sorted([n for n in topology.get(node, {}).keys()])
+        destinations = sorted([n for n in nodes if n != node])
+        
+        if not neighbors or not destinations:
+            print()
+            continue
+        
+        # Print header row with neighbors only
+        print("     ", end="")  # 5 spaces
+        for neighbor in neighbors:
+            print(f"{neighbor:<4} ", end="")  # 4 chars + space
+        print()
+        
+        # Print each destination row
+        for dest in destinations:
+            print(f"{dest:<4} ", end="")  # 4 chars + space
+            for neighbor in neighbors:
+                if neighbor in distance_tables[node][dest]:
+                    dist = distance_tables[node][dest][neighbor]
+                    if dist == float('inf'):
+                        print(f"{'INF':<4} ", end="")
+                    else:
+                        print(f"{int(dist):<4} ", end="")
+                else:
+                    print(f"{'INF':<4} ", end="")
+            print()
+        
+        print()  # Blank line between tables
+
+def run_dv_algorithm_fixed(nodes, topology, distance_tables, start_time=0, ever_neighbors=None):
+    """Run Distance Vector algorithm until convergence with proper checking"""
+    time_step = start_time
+    
+    # Track neighbors
+    if ever_neighbors is None:
+        ever_neighbors = {}
+    track_neighbors(topology, ever_neighbors)
+    
+    # Print initial state
+    print_distance_tables_with_history(distance_tables, nodes, time_step, topology, ever_neighbors)
+    
+    converged = False
+    while not converged:
+        # Create deep copy of current tables
+        old_tables = {}
+        for node in nodes:
+            old_tables[node] = {}
+            for dest in nodes:
+                if dest != node and dest in distance_tables[node]:
+                    old_tables[node][dest] = distance_tables[node][dest].copy()
+        
+        # Each node computes its distance vector
+        distance_vectors = {}
+        for node in nodes:
+            distance_vectors[node] = {}
+            for dest in nodes:
+                if dest == node:
+                    distance_vectors[node][dest] = 0
+                else:
+                    min_cost = float('inf')
+                    for neighbor in distance_tables[node].get(dest, {}):
+                        cost = distance_tables[node][dest][neighbor]
+                        if cost < min_cost:
+                            min_cost = cost
+                    distance_vectors[node][dest] = min_cost
+        
+        # Update distance tables based on received distance vectors
+        new_tables = {}
+        for node in nodes:
+            new_tables[node] = {}
+            for dest in nodes:
+                if dest != node:
+                    new_tables[node][dest] = {}
+                    # Check all neighbors that ever existed
+                    for neighbor in ever_neighbors.get(node, set()):
+                        if neighbor in topology.get(node, {}):
+                            # Current neighbor - calculate cost
+                            link_cost = topology[node][neighbor]
+                            neighbor_cost_to_dest = distance_vectors[neighbor].get(dest, float('inf'))
+                            
+                            if neighbor_cost_to_dest == float('inf'):
+                                new_cost = float('inf')
+                            else:
+                                new_cost = link_cost + neighbor_cost_to_dest
+                        else:
+                            # No longer a neighbor
+                            new_cost = float('inf')
+                        
+                        new_tables[node][dest][neighbor] = new_cost
+        
+        # Check for convergence
+        converged = True
+        for node in nodes:
+            for dest in nodes:
+                if dest != node:
+                    for neighbor in ever_neighbors.get(node, set()):
+                        old_cost = old_tables[node].get(dest, {}).get(neighbor, float('inf'))
+                        new_cost = new_tables[node].get(dest, {}).get(neighbor, float('inf'))
+                        if old_cost != new_cost:
+                            converged = False
+                            break
+                    if not converged:
+                        break
+                if not converged:
+                    break
+        
+        if not converged:
+            time_step += 1
+            distance_tables.clear()
+            distance_tables.update(new_tables)
+            print_distance_tables_with_history(distance_tables, nodes, time_step, topology, ever_neighbors)
+    
+    # Generate and print routing tables
+    routing_tables = generate_routing_tables(nodes, distance_tables)
+    print_routing_tables(routing_tables, nodes)
+    
+    return time_step
+
+def generate_routing_tables(nodes, distance_tables):
+    """Generate routing tables from distance tables"""
+    routing_tables = {}
+    
+    for node in nodes:
+        routing_tables[node] = {}
+        for dest in nodes:
+            if dest != node:
+                # Find best route (minimum cost) to destination
+                best_cost = float('inf')
+                best_neighbor = None
+                
+                for neighbor in distance_tables[node][dest]:
+                    cost = distance_tables[node][dest][neighbor]
+                    if cost < best_cost:
+                        best_cost = cost
+                        best_neighbor = neighbor
+                    elif cost == best_cost and (best_neighbor is None or neighbor < best_neighbor):
+                        # Tie-breaking: alphabetical order
+                        best_neighbor = neighbor
+                
+                if best_neighbor is not None and best_cost != float('inf'):
+                    routing_tables[node][dest] = (best_neighbor, best_cost)
+                else:
+                    routing_tables[node][dest] = ('INF', 'INF')
+    
+    return routing_tables
+
+def print_routing_tables(routing_tables, nodes):
+    """Print routing tables in required format"""
+    for node in sorted(nodes):
+        print(f"Routing Table of router {node}:")
+        for dest in sorted(nodes):
+            if dest != node:
+                next_hop, cost = routing_tables[node][dest]
+                print(f"{dest},{next_hop},{cost}")
+        print()  # Blank line between tables
+
+def apply_topology_updates_with_preservation(topology, updates, nodes, distance_tables, routing_tables):
+    """Apply topology updates while preserving previous routing information"""
+    # Save previous minimum costs from routing tables
+    previous_min_costs = {}
+    for node in nodes:
+        previous_min_costs[node] = {}
+        for dest in nodes:
+            if dest != node and node in routing_tables and dest in routing_tables[node]:
+                _, cost = routing_tables[node][dest]
+                previous_min_costs[node][dest] = cost
+            else:
+                previous_min_costs[node][dest] = float('inf')
+    
+    # Apply updates
+    for node1, node2, weight in updates:
+        # Add new nodes if they don't exist
+        if node1 not in nodes:
+            nodes.append(node1)
+            previous_min_costs[node1] = {}
+        if node2 not in nodes:
+            nodes.append(node2)
+            previous_min_costs[node2] = {}
+        
+        # Initialize topology entries if needed
+        if node1 not in topology:
+            topology[node1] = {}
+        if node2 not in topology:
+            topology[node2] = {}
+        
+        if weight == -1:
+            # Remove link from topology
+            if node2 in topology[node1]:
+                del topology[node1][node2]
+            if node1 in topology[node2]:
+                del topology[node2][node1]
+        else:
+            # Add or update the link in topology
+            topology[node1][node2] = weight
+            topology[node2][node1] = weight
+    
+    return previous_min_costs
+
+def initialize_distance_tables_with_history(nodes, topology, ever_neighbors, previous_min_costs=None):
+    """Initialize distance tables using previous routing information if available"""
+    distance_tables = {}
+    
+    for node in nodes:
+        distance_tables[node] = {}
+        for dest in nodes:
+            if dest != node:
+                distance_tables[node][dest] = {}
+                
+                # Check all neighbors that ever existed
+                for neighbor in ever_neighbors.get(node, set()):
+                    if neighbor in topology.get(node, {}):
+                        # Current neighbor
+                        if dest == neighbor:
+                            # Direct link to neighbor
+                            distance_tables[node][dest][neighbor] = topology[node][neighbor]
+                        elif previous_min_costs and neighbor in previous_min_costs and dest in previous_min_costs[neighbor]:
+                            # Use previous routing info
+                            link_cost = topology[node][neighbor]
+                            neighbor_min = previous_min_costs[neighbor][dest]
+                            if neighbor_min < float('inf'):
+                                distance_tables[node][dest][neighbor] = link_cost + neighbor_min
+                            else:
+                                distance_tables[node][dest][neighbor] = float('inf')
+                        else:
+                            distance_tables[node][dest][neighbor] = float('inf')
+                    else:
+                        # No longer a neighbor
+                        distance_tables[node][dest][neighbor] = float('inf')
+    
+    return distance_tables
+
+def track_neighbors(topology, ever_neighbors):
+    """Track all neighbors that have ever existed for each node"""
+    for node in topology:
+        if node not in ever_neighbors:
+            ever_neighbors[node] = set()
+        for neighbor in topology[node]:
+            ever_neighbors[node].add(neighbor)
+            if neighbor not in ever_neighbors:
+                ever_neighbors[neighbor] = set()
+            ever_neighbors[neighbor].add(node)
+
+def print_distance_tables_with_history(distance_tables, nodes, time_step, topology, ever_neighbors):
+    """Print distance tables showing all historical neighbors"""
+    for node in sorted(nodes):
+        print(f"Distance Table of router {node} at t={time_step}:")
+        
+        # Get all neighbors (current and historical)
+        table_neighbors = sorted(ever_neighbors.get(node, set()))
+        destinations = sorted([n for n in nodes if n != node])
+        
+        if not table_neighbors or not destinations:
+            print()
+            continue
+        
+        # Print header row
+        print("     ", end="")
+        for neighbor in table_neighbors:
+            print(f"{neighbor:<4} ", end="")
+        print()
+        
+        # Print each destination row
+        for dest in destinations:
+            print(f"{dest:<4} ", end="")
+            for neighbor in table_neighbors:
+                if neighbor in distance_tables[node][dest]:
+                    dist = distance_tables[node][dest][neighbor]
+                    if dist == float('inf'):
+                        print(f"{'INF':<4} ", end="")
+                    else:
+                        print(f"{int(dist):<4} ", end="")
+                else:
+                    print(f"{'INF':<4} ", end="")
+            print()
+        
+        print()
+
+
+
+def main():
+    # Initialize tracking variables
+    ever_neighbors = {}
+    
+    # Phase 1: Parse nodes and initial topology
+    nodes = parse_nodes()
+    topology = parse_initial_topology()
+    
+    # Track initial neighbors
+    track_neighbors(topology, ever_neighbors)
+    
+    # Phase 2: Run first DV algorithm
+    distance_tables = initialize_distance_tables_with_history(nodes, topology, ever_neighbors)
+    final_time = run_dv_algorithm_fixed(nodes, topology, distance_tables, 0, ever_neighbors)
+    
+    # Save routing tables before updates
+    routing_tables = generate_routing_tables(nodes, distance_tables)
+    
+    # Phase 3: Parse updates and run second algorithm
+    updates = parse_updates()
+    
+    # Apply updates to topology if any exist
+    if updates:
+        # Apply updates while preserving routing info
+        previous_min_costs = apply_topology_updates_with_preservation(
+            topology, updates, nodes, distance_tables, routing_tables
+        )
+        
+        # Update neighbor tracking
+        track_neighbors(topology, ever_neighbors)
+        
+        # Re-initialize with previous routing information
+        distance_tables = initialize_distance_tables_with_history(
+            nodes, topology, ever_neighbors, previous_min_costs
+        )
+        
+        # Continue from previous time step + 1
+        run_dv_algorithm_fixed(nodes, topology, distance_tables, final_time + 1, ever_neighbors)
+
+if __name__ == "__main__":
+    main()
