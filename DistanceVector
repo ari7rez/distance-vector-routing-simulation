@@ -380,25 +380,43 @@ def print_distance_tables_with_history(distance_tables, nodes, time_step, topolo
 
 
 def main():
+    # Initialize tracking variables
     ever_neighbors = {}
+    
     # Phase 1: Parse nodes and initial topology
     nodes = parse_nodes()
     topology = parse_initial_topology()
     
+    # Track initial neighbors
+    track_neighbors(topology, ever_neighbors)
     
-    # Phase 2: Run first DV algorithm (after UPDATE keyword)
-    distance_tables = initialize_distance_tables(nodes, topology)
-    final_time = run_dv_algorithm(nodes, topology, distance_tables, 0)
+    # Phase 2: Run first DV algorithm
+    distance_tables = initialize_distance_tables_with_history(nodes, topology, ever_neighbors)
+    final_time = run_dv_algorithm_fixed(nodes, topology, distance_tables, 0, ever_neighbors)
     
-    # Phase 3: Parse updates and run second algorithm (after END keyword)
+    # Save routing tables before updates
+    routing_tables = generate_routing_tables(nodes, distance_tables)
+    
+    # Phase 3: Parse updates and run second algorithm
     updates = parse_updates()
     
     # Apply updates to topology if any exist
     if updates:
-        apply_topology_updates(topology, updates, nodes, distance_tables)
-        distance_tables = initialize_distance_tables(nodes, topology)
-        run_dv_algorithm(nodes, topology, distance_tables, final_time)
-    
+        # Apply updates while preserving routing info
+        previous_min_costs = apply_topology_updates_with_preservation(
+            topology, updates, nodes, distance_tables, routing_tables
+        )
+        
+        # Update neighbor tracking
+        track_neighbors(topology, ever_neighbors)
+        
+        # Re-initialize with previous routing information
+        distance_tables = initialize_distance_tables_with_history(
+            nodes, topology, ever_neighbors, previous_min_costs
+        )
+        
+        # Continue from previous time step + 1
+        run_dv_algorithm_fixed(nodes, topology, distance_tables, final_time + 1, ever_neighbors)
 
 if __name__ == "__main__":
     main()
