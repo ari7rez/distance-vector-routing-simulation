@@ -173,20 +173,29 @@ def run_dv_algorithm_with_pr(nodes, topology, distance_tables, start_time=0, eve
                         next_hops[node][dest] = best_neighbor
         
         # Each node computes its distance vector
-        distance_vectors = {}
+        distance_vectors_to_send = {}
         for node in nodes:
-            distance_vectors[node] = {}
-            for dest in nodes:
-                if dest == node:
-                    distance_vectors[node][dest] = 0
-                else:
-                    min_cost = float('inf')
-                    for neighbor in distance_tables[node].get(dest, {}):
-                        cost = distance_tables[node][dest][neighbor]
-                        if cost < min_cost:
-                            min_cost = cost
-                    distance_vectors[node][dest] = min_cost
-        
+            distance_vectors_to_send[node] = {}
+            for neighbor in topology.get(node, {}):
+                # Create a distance vector specifically for this neighbor
+                dv_for_neighbor = {}
+                for dest in nodes:
+                    if dest == node:
+                        dv_for_neighbor[dest] = 0
+                    else:
+                        # Check if we route to dest through this neighbor
+                        if dest in next_hops[node] and next_hops[node][dest] == neighbor:
+                            # POISON REVERSE: Tell neighbor our distance is infinity
+                            dv_for_neighbor[dest] = float('inf')
+                        else:
+                            # Normal: advertise our best distance
+                            min_cost = float('inf')
+                            for n in distance_tables[node].get(dest, {}):
+                                cost = distance_tables[node][dest][n]
+                                if cost < min_cost:
+                                    min_cost = cost
+                            dv_for_neighbor[dest] = min_cost
+                distance_vectors_to_send[node][neighbor] = dv_for_neighbor
         # Update distance tables based on received distance vectors
         new_tables = {}
         for node in nodes:
