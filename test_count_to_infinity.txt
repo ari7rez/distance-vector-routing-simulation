@@ -1,0 +1,10 @@
+A
+B
+C
+START
+A B 1
+B C 1
+A C 50
+UPDATE
+B C -1
+END

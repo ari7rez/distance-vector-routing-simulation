@@ -229,9 +229,9 @@ Files to create:
 
 Tasks:
 - [X] Copy DistanceVector as starting point
-- [ ] Implement poisoned reverse logic
-- [ ] Test with same topologies
-- [ ] Commit: "Implement poisoned reverse algorithm"
+- [x] Implement poisoned reverse logic
+- [x] Test with same topologies
+- [x] Commit: "Implement poisoned reverse algorithm"
 
 ---
 
@@ -240,17 +240,17 @@ Tasks:
 ### 7.1 Final Validation
 
 Tasks:
-- [ ] Test both programs thoroughly
-- [ ] Verify all edge cases
-- [ ] Clean up any remaining issues
-- [ ] Commit: "Final testing and bug fixes"
+- [x] Test both programs thoroughly
+- [X] Verify all edge cases
+- [X] Clean up any remaining issues
+- [x] Commit: "Final testing and bug fixes"
 
 ### 7.2 Submission Preparation
 
 Files to check:
 - [X] `DistanceVector` (working Python file)
 - [X] `PoisonedReverse` (working Python file, if doing bonus)
-- [ ] All test cases and documentation
+- [x] All test cases and documentation
 
 Tasks:
 - [ ] Final Gradescope submission

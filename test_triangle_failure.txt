@@ -1,0 +1,10 @@
+X
+Y
+Z
+START
+X Y 4
+Y Z 1
+X Z 6
+UPDATE
+X Y -1
+END
