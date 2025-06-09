@@ -208,7 +208,8 @@ def run_dv_algorithm_with_pr(nodes, topology, distance_tables, start_time=0, eve
                         if neighbor in topology.get(node, {}):
                             # Current neighbor - calculate cost
                             link_cost = topology[node][neighbor]
-                            neighbor_cost_to_dest = distance_vectors[neighbor].get(dest, float('inf'))
+                            neighbor_dv = distance_vectors_to_send.get(neighbor, {}).get(node, {})
+                            neighbor_cost_to_dest = neighbor_dv.get(dest, float('inf'))
                             
                             if neighbor_cost_to_dest == float('inf'):
                                 new_cost = float('inf')
