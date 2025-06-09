@@ -127,7 +127,7 @@ def print_distance_tables(distance_tables, nodes, time_step):
         
         print()  # Blank line between tables
 
-def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
+def def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
     """Run Distance Vector algorithm until convergence"""
     time_step = start_time
     print_distance_tables(distance_tables, nodes, time_step)
@@ -135,7 +135,7 @@ def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
     while True:
         time_step += 1
         
-        # Store old tables for convergence check
+        # Store old tables for convergence check (deep copy)
         old_tables = {}
         for node in nodes:
             old_tables[node] = {}
@@ -144,50 +144,46 @@ def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
                     old_tables[node][dest] = distance_tables[node][dest].copy()
         
         # Update distance tables using DV equation
+        changes_made = False
         for node in nodes:
             for dest in nodes:
                 if dest != node:
                     for neighbor in topology.get(node, {}):
-                        if neighbor != dest:  # Don't route to dest via dest
-                            # DV equation: min(current, cost_to_neighbor + neighbor_distance_to_dest)
+                        if neighbor != dest:  # Don't route to dest via dest itself
+                            # DV equation: D_x(y) = min{c(x,v) + D_v(y)} for all neighbors v
                             current_dist = distance_tables[node][dest][neighbor]
                             neighbor_cost = topology[node][neighbor]
                             
-                            # Find best distance from neighbor to dest
+                            # Find best distance from neighbor to dest using old tables
                             best_neighbor_dist = float('inf')
-                            for via in old_tables[neighbor][dest]:
-                                if old_tables[neighbor][dest][via] < best_neighbor_dist:  
-                                    best_neighbor_dist = old_tables[neighbor][dest][via]
+                            if neighbor in old_tables and dest in old_tables[neighbor]:
+                                for via in old_tables[neighbor][dest]:
+                                    best_neighbor_dist = min(best_neighbor_dist, old_tables[neighbor][dest][via])
                             
                             new_dist = neighbor_cost + best_neighbor_dist
-                            distance_tables[node][dest][neighbor] = min(current_dist, new_dist)
+                            
+                            # Update if we found a better path
+                            if new_dist < current_dist:
+                                distance_tables[node][dest][neighbor] = new_dist
+                                changes_made = True
         
         print_distance_tables(distance_tables, nodes, time_step)
         
-        # Check convergence (simplified for now)
-        converged = True
-        for node in nodes:
-            for dest in nodes:
-                if dest != node:
-                    for neighbor in nodes:
-                         current_dist = distance_tables[node][dest].get(neighbor, float('inf'))
-                         old_dist = old_tables[node][dest].get(neighbor, float('inf'))
-                         if current_dist != old_dist:
-                            converged = False
-                            break
-                if not converged:
-                    break
-            if not converged:
-                break
-        
-        if converged:
+        # Check convergence - if no changes were made, we've converged
+        if not changes_made:
             routing_tables = generate_routing_tables(nodes, distance_tables)
             print_routing_tables(routing_tables, nodes)
             break
         
-        if time_step > 20:  # Safety limit
+        # Safety limit to prevent infinite loops
+        if time_step > 50:
+            print("Warning: Algorithm did not converge within 50 iterations")
+            routing_tables = generate_routing_tables(nodes, distance_tables)
+            print_routing_tables(routing_tables, nodes)
             break
+    
     return time_step
+
 def generate_routing_tables(nodes, distance_tables):
     """Generate routing tables from distance tables"""
     routing_tables = {}
@@ -205,7 +201,7 @@ def generate_routing_tables(nodes, distance_tables):
                     if cost < best_cost:
                         best_cost = cost
                         best_neighbor = neighbor
-                    elif cost == best_cost and neighbor < best_neighbor:
+                    elif cost == best_cost and (best_neighbor is None or neighbor < best_neighbor):
                         # Tie-breaking: alphabetical order
                         best_neighbor = neighbor
                 
