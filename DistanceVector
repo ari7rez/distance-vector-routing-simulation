@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 
-# Assignment3 Network_routing
-# Distance Vector Routing Algorithm Implementation
+"""
+Distance Vector Routing Algorithm Implementation
+Assignment 3 - Network Routing Protocols
+
+This program implements the Distance Vector (DV) routing algorithm, which allows
+routers to discover optimal paths through a network using only local information
+exchange with neighbors.
+
+Author: Mohammad Ali Rezaei
+Date: 09/06/2025
+"""
 
 def parse_nodes():
     """Read node names until START keyword"""

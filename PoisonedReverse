@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 
-# Assignment3 Network_routing
 """
-Poisoned Reverse: If node A routes through neighbor B to reach C,
-A tells B that its distance to C is infinity. This prevents B from
-routing back through A if B's link to C fails.
+PR Distance Vector Routing Algorithm Implementation
+Assignment 3 - Network Routing Protocols
+
+This program implements the Distance Vector (DV) routing algorithm, which allows
+routers to discover optimal paths through a network using only local information
+exchange with neighbors.
+
+Author: Mohammad Ali Rezaei
+Date: 09/06/2025
 """
 
 def parse_nodes():
