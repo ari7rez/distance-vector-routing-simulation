@@ -248,8 +248,8 @@ Tasks:
 ### 7.2 Submission Preparation
 
 Files to check:
-- [ ] `DistanceVector` (working Python file)
-- [ ] `PoisonedReverse` (working Python file, if doing bonus)
+- [X] `DistanceVector` (working Python file)
+- [X] `PoisonedReverse` (working Python file, if doing bonus)
 - [ ] All test cases and documentation
 
 Tasks:
@@ -321,23 +321,19 @@ Testing results:
 - [ ] No spelling errors in comments
 
 ### Testing Strategy
-- [ ] Manual calculation of expected results BEFORE coding
-- [ ] Test with provided sample topology first
-- [ ] Create additional test topologies
-- [ ] Test topology changes/updates
-- [ ] Verify convergence in all scenarios
-- [ ] Use input/output redirection for testing
-- [ ] Compare outputs with expected results using diff
+- [x] Manual calculation of expected results BEFORE coding
+- [x] Test with provided sample topology first
+- [x] Create additional test topologies
+- [x] Test topology changes/updates
+- [x] Verify convergence in all scenarios
+- [x] Use input/output redirection for testing
+- [x] Compare outputs with expected results using diff
 
 ### Submission Requirements
-- [ ] Python files with proper shebang: `#!/usr/bin/env python3`
-- [ ] UNIX line endings (test on uni system)
-- [ ] Programs named exactly: `DistanceVector` and `PoisonedReverse`
-- [ ] No file extensions (.py) for final submission
-- [ ] All code works on submission system, not just personal machine
+- [X] Python files with proper shebang: `#!/usr/bin/env python3`
+- [X] UNIX line endings (test on uni system)
+- [X] Programs named exactly: `DistanceVector` and `PoisonedReverse`
+- [X] No file extensions (.py) for final submission
+- [X] All code works on submission system, not just personal machine
 
 ---
-
-## VS CODE SETUP READY
-
-Now let's set up your VS Code project structure!
