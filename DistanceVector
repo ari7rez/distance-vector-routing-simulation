@@ -128,7 +128,7 @@ def print_distance_tables(distance_tables, nodes, time_step, topology):
             print()
         
         print()  # Blank line between tables
-        
+
 def run_dv_algorithm(nodes, topology, distance_tables, start_time=0):
     """Run Distance Vector algorithm until convergence"""
     time_step = start_time
@@ -266,12 +266,60 @@ def apply_topology_updates(topology, updates, nodes, distance_tables):
             topology[node2][node1] = weight
 
 
+def track_neighbors(topology, ever_neighbors):
+    """Track all neighbors that have ever existed for each node"""
+    for node in topology:
+        if node not in ever_neighbors:
+            ever_neighbors[node] = set()
+        for neighbor in topology[node]:
+            ever_neighbors[node].add(neighbor)
+            if neighbor not in ever_neighbors:
+                ever_neighbors[neighbor] = set()
+            ever_neighbors[neighbor].add(node)
+
+def print_distance_tables_with_history(distance_tables, nodes, time_step, topology, ever_neighbors):
+    """Print distance tables showing all historical neighbors"""
+    for node in sorted(nodes):
+        print(f"Distance Table of router {node} at t={time_step}:")
+        
+        # Get all neighbors (current and historical)
+        table_neighbors = sorted(ever_neighbors.get(node, set()))
+        destinations = sorted([n for n in nodes if n != node])
+        
+        if not table_neighbors or not destinations:
+            print()
+            continue
+        
+        # Print header row
+        print("     ", end="")
+        for neighbor in table_neighbors:
+            print(f"{neighbor:<4} ", end="")
+        print()
+        
+        # Print each destination row
+        for dest in destinations:
+            print(f"{dest:<4} ", end="")
+            for neighbor in table_neighbors:
+                if neighbor in distance_tables[node][dest]:
+                    dist = distance_tables[node][dest][neighbor]
+                    if dist == float('inf'):
+                        print(f"{'INF':<4} ", end="")
+                    else:
+                        print(f"{int(dist):<4} ", end="")
+                else:
+                    print(f"{'INF':<4} ", end="")
+            print()
+        
+        print()
+
+
 
 def main():
-    
+    ever_neighbors = {}
     # Phase 1: Parse nodes and initial topology
     nodes = parse_nodes()
     topology = parse_initial_topology()
+    
     
     # Phase 2: Run first DV algorithm (after UPDATE keyword)
     distance_tables = initialize_distance_tables(nodes, topology)
