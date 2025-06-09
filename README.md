@@ -218,9 +218,9 @@ Tasks:
 ### 6.1 Algorithm Study
 
 Tasks:
-- [ ] Study poisoned reverse mechanism
-- [ ] Plan implementation differences
-- [ ] Commit: "Studied poisoned reverse algorithm"
+- [X] Study poisoned reverse mechanism
+- [X] Plan implementation differences
+- [X] Commit: "Studied poisoned reverse algorithm"
 
 ### 6.2 Implementation
 
@@ -228,7 +228,7 @@ Files to create:
 - `PoisonedReverse` (Python file)
 
 Tasks:
-- [ ] Copy DistanceVector as starting point
+- [X] Copy DistanceVector as starting point
 - [ ] Implement poisoned reverse logic
 - [ ] Test with same topologies
 - [ ] Commit: "Implement poisoned reverse algorithm"
