@@ -147,7 +147,38 @@ Step 12
 Tasks:
 - [x] Submit to Gradescope for acceptance testing
 - [x] Fix any issues found
-- [ ] Commit: "Fix issues from Gradescope acceptance testing"
+- [x] Commit: "Fix issues from Gradescope acceptance testing"
+### 4.4 Critical Fixes for Gradescope (Step 12a-12f)
+
+**Step 12a**: Fix syntax error
+- [x] Fix `def def` → `def`
+- [x] Commit: "Fix syntax error in run_dv_algorithm"
+
+**Step 12b**: Show only neighbors in tables
+- [x] Update print_distance_tables to show only neighbor columns
+- [x] Commit: "Update distance table display to show only neighbors"
+
+**Step 12c**: Track historical neighbors
+- [x] Add ever_neighbors tracking for removed links
+- [x] Commit: "Add historical neighbor tracking"
+
+**Step 12d**: Fix convergence at t=2
+- [x] Check convergence BEFORE updating tables
+- [x] Commit: "Fix convergence detection - now converges at t=2"
+
+**Step 12e**: Preserve routing info
+- [x] Save routing tables before updates
+- [x] Use previous costs when reinitializing
+- [x] Commit: "Preserve routing information during topology updates"
+
+**Step 12f**: Continue time steps
+- [x] Time continues from t=3 (not reset to t=0)
+- [x] Commit: "Fix time step continuity after updates"
+
+**Verify**: 
+- [x] Converges at t=2, continues at t=3
+- [x] Shows all historical neighbors after link removal
+- [x] Output matches expected exactly
 
 ---
 
@@ -160,30 +191,25 @@ Step 13-16
 - [x] Fix time step continuity between algorithm runs
 - [x] Fix output spacing to match expected format exactly
 - [x] Fix time sequence
-- [ ] Pass Gradescope acceptance tests
+- [x] Pass Gradescope acceptance tests
 - [x] Commit:"Fixed DV equation to use previous round data for synchronous updates"
 - [x] fixed more bugs and Enhanced apply_topology_updates()
 ### 5.1 Additional Test Cases
 
-Files to create:
-- test_cases/test_topology.txt
-- test_cases/test_input.txt
-- test_cases/various_weights.txt
-
 Tasks:
 - [x] Create and test multiple topologies
-- [ ] Test topology updates/changes
-- [ ] Verify convergence in all cases
-- [ ] Commit: "Add comprehensive test suite and fix edge cases"
+- [x] Test topology updates/changes
+- [x] Verify convergence in all cases
+- [x] Commit: "Add comprehensive test suite and fix edge cases"
 
 ### 5.2 Code Quality Review
 
 Tasks:
-- [ ] Add method documentation
-- [ ] Clean up variable names
-- [ ] Remove magic numbers
-- [ ] Ensure methods < 80 lines
-- [ ] Commit: "Code quality improvements and documentation"
+- [x] Add method documentation
+- [x] Clean up variable names
+- [x] Remove magic numbers
+- [x] Ensure methods < 80 lines
+- [x] Commit: "Code quality improvements and documentation"
 
 ---
 
